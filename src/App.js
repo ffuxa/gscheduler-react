@@ -1,28 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import NewGroup from "./components/NewGroup";
+import ListStudents from "./components/ListStudents";
+import ListGroups from "./components/ListGroups";
+
 import './App.css';
 
+import { connect } from 'react-redux';
+import { getWhenIsGoodAvailability } from "./actions/availability";
+
 class App extends Component {
+  componentWillMount() {
+    this.props.getAvails();
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <ListStudents/>
+        <NewGroup/>
+        <ListGroups/>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    avails: state.availability.students,
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getAvails: () => dispatch(getWhenIsGoodAvailability())
+  }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
