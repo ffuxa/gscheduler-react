@@ -13,7 +13,9 @@ class Sidebar extends Component {
   }
 
   onSelect = (selected) => {
-    this.props.selectSidebarItem(selected);
+    if (selected !== 'view-source') {
+      this.props.selectSidebarItem(selected);
+    }
   };
 
   onToggle = (isOpen) => {
@@ -88,10 +90,14 @@ class Sidebar extends Component {
             {/* View Source (Github) */}
             <NavItem eventKey="view-source">
               <NavIcon>
-                <i className="fab fa-github" style={styles.icon} />
+                <a href="https://github.com/ffuxa/gscheduler-react" target="_blank" rel="noreferrer noopener">
+                  <i className="fab fa-github" style={styles.icon} />
+                </a>
               </NavIcon>
               <NavText style={styles.text}>
-                View Source
+                <a href="https://github.com/ffuxa/gscheduler-react" target="_blank" rel="noreferrer noopener">
+                  View Source
+                </a>
               </NavText>
             </NavItem>
           </Nav>
