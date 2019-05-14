@@ -4,6 +4,8 @@ by Fabian Fuxa
 This is an open source project with the mission of creating an automatic scheduling solution 
 for organizations with multiple groups.
 
+To view a _very_ _very_ rough mockup of what I envision the app will look like, see this link: https://app.moqups.com/QGJCE8b2zL/view/page/a09ade022
+
 Below is the default create-react-app default README for info on how to run the app
 
 <br/><br/><br/><hr/><br/><br/><br/><br/>
