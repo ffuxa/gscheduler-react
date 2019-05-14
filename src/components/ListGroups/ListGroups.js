@@ -139,7 +139,17 @@ class ListGroups extends Component {
     return (
       <div>
         <h3>Groups</h3>
-        <button className="btn btn-primary" onClick={this.addGroup}>Add Group</button>
+        { this.props.groups.length === 0 && !this.props.addingGroup &&
+          <div>
+            <br/><br/>
+            <h5 className="center">No groups have been added yet!</h5>
+          </div>
+        }
+        { !this.props.addingGroup &&
+          <div className="center">
+            <button className="btn btn-primary" onClick={this.addGroup}>Add Group</button>
+          </div>
+        }
 
         {/* New Group */}
         {this.props.addingGroup && <div><br/><NewGroup/></div>}
