@@ -1,0 +1,18 @@
+.group-container {
+    background-color: lightblue;
+    margin: 20px;
+    padding: 20px;
+    min-width: 300px;
+}
+
+.members-container {
+    margin-left: 10px;
+}
+
+.new-member-container {
+    border: 2px solid gray;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 20px;
+}

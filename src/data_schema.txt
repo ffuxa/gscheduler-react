@@ -1,0 +1,34 @@
+// NOTE: This is just a draft of what I imagine the state will look like,
+// and it probably will change as we develop the app further
+
+Person
+ - name: string
+ - pk: int
+ - availability: {
+     availName: string -> availability: List[Date]
+   }
+
+
+Group
+ - name: string
+ - pk: int
+ - members: List[
+     name: string
+     isLeader: boolean
+     pk: int                    // Student pks
+   ]
+
+
+Schedule
+ - pk: int
+ - order: List[int]             // Group pks
+ - cost: float
+ - avail_used: int              // Avail pk
+
+
+Avail
+ - name: string
+ - start_date: datetime
+ - end_date: datetime
+ - repeating: boolean
+

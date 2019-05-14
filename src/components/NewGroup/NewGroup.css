@@ -1,0 +1,12 @@
+.new-group-container {
+    border: 2px solid gray;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.members-container {
+    margin-left: 10px;
+    margin-right: 10px;
+}
