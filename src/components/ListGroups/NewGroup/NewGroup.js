@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addGroup, cancelAddingGroup } from "../../actions/group";
+import { compose } from "redux";
+import { firestoreConnect } from "react-redux-firebase";
+import { addGroup, cancelAddingGroup } from "../../../actions/group";
 import "./NewGroup.css";
 
 const initialState = {
@@ -29,6 +31,7 @@ class NewGroup extends Component {
     // Create a copy of the state array to avoid mutating the state directly
     let members = [...this.state.members];
     members[index].name = e.target.value;
+    members[index].id = e.target[e.target.selectedIndex].getAttribute('id');
     this.setState({ members });
   }
 
@@ -47,6 +50,7 @@ class NewGroup extends Component {
         {
           name: "",
           isSongLeader: false,
+          id: ""
         }
       ]
     });
@@ -69,9 +73,10 @@ class NewGroup extends Component {
     // Returns the people that havent been chosen already as a member or song leader
     // Prevents "double adding" of a member
 
-    return this.props.people.filter(el => {
-      return this.state.members.map(a => a.name).indexOf(el.name) === -1 // el.name !== this.state.songLeader && !this.state.members.includes(el.name);
-    });
+    // Check if people is defined first, since people might not be loaded from firestore immediately...
+    return this.props.people !== undefined ? this.props.people.filter(el => {
+      return this.state.members.map(a => a.name).indexOf(el.name) === -1
+    }) : [];
   }
 
   removeMember(index) {
@@ -106,10 +111,10 @@ class NewGroup extends Component {
                                 onChange={(e) => this.handleMemberNameChange(m_index, e)}>
                           <option value="Choose person...">Choose person...</option>
                           { member.name !== "" &&
-                            <option value={member.name}>{member.name}</option>
+                            <option value={member.name} id={member.id}>{member.name}</option>
                           }
                           { this.availablePeople().map((person, p_index) =>
-                            <option key={p_index} value={person.name}>{person.name}</option>
+                            <option key={p_index} value={person.name} id={person.id}>{person.name}</option>
                           )}
                         </select>
                       </div>
@@ -142,7 +147,7 @@ class NewGroup extends Component {
 
 const mapStateToProps = state => {
   return {
-    people: state.people.people,
+    people: state.firestore.ordered.people,     // Load people directly from firestore
   }
 };
 
@@ -153,4 +158,7 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewGroup);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  firestoreConnect(['people'])
+)(NewGroup);

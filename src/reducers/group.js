@@ -3,8 +3,11 @@ import {
   START_ADDING_GROUP,
   CANCEL_ADDING_GROUP,
   DELETE_GROUP,
+  DELETE_GROUP_ERROR,
   DELETE_MEMBER_FROM_GROUP,
-  ADD_MEMBER_TO_GROUP
+  DELETE_MEMBER_FROM_GROUP_ERROR,
+  ADD_MEMBER_TO_GROUP,
+  ADD_MEMBER_TO_GROUP_ERROR
 } from "../actions/types";
 
 export const group = (state = {
@@ -13,9 +16,9 @@ export const group = (state = {
 }, action) => {
   switch (action.type) {
     case ADD_GROUP:
+      console.log("Successfully added group to database");
       return {
         ...state,
-        groups: [...state.groups, action.newGroup],
         addingGroup: false,
       };
     case START_ADDING_GROUP:
@@ -29,28 +32,23 @@ export const group = (state = {
         addingGroup: false,
       };
     case DELETE_GROUP:
-      return {
-        ...state,
-        groups: state.groups.filter((_, i) => i !== action.index),
-      };
+      console.log("Successfully deleted group from database");
+      return state;
+    case DELETE_GROUP_ERROR:
+      console.log("Error deleting group from database. ERROR message: ", action.error);
+      return state;
     case DELETE_MEMBER_FROM_GROUP:
-      return {
-        ...state,
-        groups: state.groups.map(
-          (group, i) => i === action.group_index ? {
-            ...group, members: group.members.filter((_, j) => j !== action.member_index)
-          } : group
-        ),
-      };
+      console.log("Successfully deleted member from group in database");
+      return state;
+    case DELETE_MEMBER_FROM_GROUP_ERROR:
+      console.log("ERROR deleting member from group in database. ERROR message: ", action.error);
+      return state;
     case ADD_MEMBER_TO_GROUP:
-      return {
-        ...state,
-        groups: state.groups.map(
-          (group, i) => i === action.group_index ? {
-            ...group, members: [...group.members, action.newMember]
-          } : group
-        ),
-      };
+      console.log("Successfully added member to group in database");
+      return state;
+    case ADD_MEMBER_TO_GROUP_ERROR:
+      console.log("ERROR adding member to group in database. ERROR message: ", action.error);
+      return state;
     default:
       return state;
   }

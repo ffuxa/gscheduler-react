@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addPerson } from "../actions/people";
-import { updateName } from "../actions/people";
+import { updatePersonName } from "../actions/people";
+import { firestoreConnect } from "react-redux-firebase";
+import { compose } from 'redux';
 import bootbox from 'bootbox';
+import Loading from './Loading/Loading';
 
 class ListPeople extends Component {
   constructor(props) {
@@ -30,23 +33,26 @@ class ListPeople extends Component {
       size: "small",
       title: "Edit Name:",
       value: person.name,
-      callback: name => {
-        if (name !== null) {
-          this.props.updateName(index, name)
+      callback: newName => {
+        if (newName !== null) {
+          this.props.updatePersonName(index, newName, person)
         }
       }
     });
   }
 
   render() {
-    return (
-      <div>
-        <h3>People</h3>
-        <br/><br/>
-        { this.props.people.length === 0 &&
+    const { people } = this.props;
+
+    if (people !== undefined) {
+      return (
+        <div>
+          <h3>People</h3>
+          <br/><br/>
+          {this.props.people !== undefined && this.props.people.length === 0 &&
           <h5 className="center">No people have been added yet!</h5>
-        }
-        { this.props.people.length > 0 &&
+          }
+          {this.props.people !== undefined && this.props.people.length > 0 &&
           <table className="table">
             <thead>
             <tr>
@@ -61,7 +67,8 @@ class ListPeople extends Component {
               <tr key={index}>
                 <th scope="row" style={styles.tableData}>{index + 1}</th>
                 <td style={styles.tableData}>
-                  {person.name}  <i onClick={() => this.editMember(index)} className="fas fa-edit clickable"/>
+                  {person.name} <i onClick={() => this.editMember(index)}
+                                   className="fas fa-edit clickable"/>
                 </td>
                 <td style={styles.tableData}>N/A</td>
                 <td style={styles.tableData}>N/A</td>
@@ -69,30 +76,39 @@ class ListPeople extends Component {
             )}
             </tbody>
           </table>
-        }
-        <br/><br/>
-        <div className="center">
-          <button className="btn btn-primary" onClick={this.addPerson}>Add</button>
+          }
+          <br/><br/>
+          <div className="center">
+            <button className="btn btn-primary" onClick={this.addPerson}>Add Person</button>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
+    else {
+      return (
+        <Loading/>
+      );
+    }
   }
 }
 
 const mapStateToProps = state => {
   return {
-    people: state.people.people,
+    people: state.firestore.ordered.people,     // Load people directly from firestore
   }
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     addPerson: (name) => dispatch(addPerson(name)),
-    updateName: (index, newName) => dispatch(updateName(index, newName))
+    updatePersonName: (index, newName, person) => dispatch(updatePersonName(index, newName, person))
   }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListPeople);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  firestoreConnect(['people'])
+)(ListPeople);
 
 // TODO: Decide if we're gonna use this technique to apply styles or use a .css file
 const styles = {

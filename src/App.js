@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ListPeople from "./components/ListPeople";
 import ListGroups from "./components/ListGroups/ListGroups";
+import ListAvails from "./components/ListAvails";
 import Sidebar from "./components/Sidebar";
 
 import './App.css';
@@ -22,6 +23,9 @@ class App extends Component {
         }
         { this.props.current_page === "groups" &&
           <ListGroups/>
+        }
+        { this.props.current_page === "avails" &&
+          <ListAvails/>
         }
       </div>
     );
